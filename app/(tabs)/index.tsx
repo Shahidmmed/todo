@@ -11,13 +11,8 @@ import { Users } from "@/components/models/Users";
 import { ThemedText } from "@/components/ThemedText";
 
 export default function TodoApp() {
-  const { userInfo, setUserInfo, loadTasks } = useContext(UserContext);
+  const { userInfo, completeTask, loadTasks } = useContext(UserContext);
   const [taskItems, setTaskItems] = useState<Users[]>([]);
-
-  const completeTask = (index: number) => {
-    const updatedTasks = userInfo.filter((_, taskIndex) => taskIndex !== index);
-    setUserInfo(updatedTasks);
-  };
 
   useEffect(() => {
     loadTasks();

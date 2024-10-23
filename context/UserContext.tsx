@@ -13,12 +13,14 @@ interface UserContextType {
   userInfo: Users[];
   setUserInfo: Dispatch<SetStateAction<Users[]>>;
   loadTasks: () => Promise<void>;
+  completeTask: (index: number) => Promise<void>;
 }
 
 export const UserContext = createContext<UserContextType>({
   userInfo: [],
   setUserInfo: () => {},
   loadTasks: async () => {},
+  completeTask: async () => {},
 });
 
 interface UserProviderProps {
@@ -29,7 +31,6 @@ const UserProvider = ({ children }: UserProviderProps) => {
   const [userInfo, setUserInfo] = useState<Users[]>([]);
 
   const loadTasks = async () => {
-    console.log("first");
     try {
       const existingTasksJSON = await AsyncStorage.getItem("tasks");
       const existingTasks = existingTasksJSON
@@ -41,8 +42,24 @@ const UserProvider = ({ children }: UserProviderProps) => {
     }
   };
 
+  const completeTask = async (index: number) => {
+    try {
+      const updatedTasks = userInfo.filter(
+        (_, taskIndex) => taskIndex !== index
+      );
+      setUserInfo(updatedTasks);
+      await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+      console.log("Task deleted and AsyncStorage updated successfully.");
+    } catch (error) {
+      console.error("Error updating AsyncStorage:", error);
+    }
+  };
+
   return (
-    <UserContext.Provider value={{ userInfo, setUserInfo, loadTasks }}>
+    <UserContext.Provider
+      value={{ userInfo, setUserInfo, loadTasks, completeTask }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -14,7 +14,7 @@ import { UserContext } from "@/context/UserContext";
 import CustomButton from "@/components/CustomButton";
 import { router } from "expo-router";
 import AppGradient from "@/components/AppGradient";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SelectList } from "react-native-dropdown-select-list";
 import { ThemedText } from "@/components/ThemedText";
@@ -137,7 +137,13 @@ const SetTask = () => {
         </View>
 
         <View className="mb-5">
-          <CustomButton title="Set task" onPress={storeTask} />
+          <CustomButton
+            title="Set task"
+            onPress={storeTask}
+            IconComponent={
+              <Entypo name="add-to-list" size={30} color="black" />
+            }
+          />
         </View>
       </AppGradient>
     </View>
