@@ -9,27 +9,36 @@ import { UserContext } from "@/context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Users } from "@/components/models/Users";
 import { ThemedText } from "@/components/ThemedText";
+import { useTheme } from "@react-navigation/native";
 
 export default function TodoApp() {
   const { userInfo, completeTask, loadTasks } = useContext(UserContext);
   const [taskItems, setTaskItems] = useState<Users[]>([]);
+
+  const theme = useTheme();
 
   useEffect(() => {
     loadTasks();
   }, []);
 
   useEffect(() => {
-    setTaskItems(userInfo); // Update taskItems when userInfo changes
+    setTaskItems(userInfo);
   }, [userInfo]);
 
   return (
-    <ThemedView className="flex-1 bg-gray-100 dark:bg-gray-900">
+    <ThemedView
+      className={`flex-1 ${theme.dark ? "bg-gray-900" : "bg-gray-100"}`}
+    >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
         <ThemedView className="pt-16 px-5">
-          <ThemedText className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          <ThemedText
+            className={`text-2xl font-bold ${
+              theme.dark ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
             Today's tasks
           </ThemedText>
           <ThemedView className="mt-7">
@@ -52,22 +61,6 @@ export default function TodoApp() {
           onPress={() => router.push("./(modal)/set-task")}
         />
       </View>
-      {/* <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="absolute bottom-4 w-full flex-row justify-around items-center"
-      >
-        <TextInput
-          className="py-4 px-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full w-64 text-gray-900 dark:text-gray-100"
-          placeholder="Write a task"
-          value={task}
-          onChangeText={(text) => setTask(text)}
-        />
-        <TouchableOpacity onPress={handleAddTask}>
-          <ThemedView className="w-14 h-14 bg-white dark:bg-gray-800 rounded-[30px] justify-center items-center border border-gray-300 dark:border-gray-600">
-            <Text className="text-2xl text-gray-900 dark:text-gray-100">+</Text>
-          </ThemedView>
-        </TouchableOpacity>
-      </KeyboardAvoidingView> */}
     </ThemedView>
   );
 }

@@ -8,7 +8,7 @@ import {
   Alert,
   useColorScheme,
 } from "react-native";
-import { DarkTheme, DefaultTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserContext";
 import CustomButton from "@/components/CustomButton";
@@ -20,6 +20,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { ThemedText } from "@/components/ThemedText";
 
 const SetTask = () => {
+  const theme = useTheme();
   const { userInfo, setUserInfo, loadTasks } = useContext(UserContext);
   const [task, setTask] = useState({
     user: "",
@@ -103,32 +104,42 @@ const SetTask = () => {
             className=""
           >
             <TextInput
-              className="py-4 px-4 mb-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full text-gray-900 dark:text-gray-100"
+              className={`py-4 px-4 mb-5 ${
+                theme.dark
+                  ? "bg-gray-800 border-gray-600"
+                  : "bg-white border-gray-300"
+              } rounded-xl w-full text-gray-900 dark:text-gray-100`}
               placeholder="Assign User"
+              placeholderTextColor={theme.dark ? "#a1a1a1" : "#6b7280"}
               value={task.user}
               onChangeText={(text) => inputChangeHandler("user", text)}
             />
             <SelectList
               boxStyles={{
                 marginBottom: 20,
-                backgroundColor: isDarkMode ? "#1f2937" : "white",
-                borderColor: isDarkMode ? "#4b5563" : "#d1d5db",
+                backgroundColor: theme.dark ? "#1f2937" : "white",
+                borderColor: theme.dark ? "#4b5563" : "#d1d5db",
               }}
               setSelected={handleCountrySelect}
               dropdownStyles={{
-                backgroundColor: isDarkMode ? "#1f2937" : "white",
-                borderColor: isDarkMode ? "#4b5563" : "#d1d5db",
+                backgroundColor: theme.dark ? "#1f2937" : "white",
+                borderColor: theme.dark ? "#4b5563" : "#d1d5db",
               }}
               data={countries.map((country) => ({
                 key: country,
                 value: country,
               }))}
               placeholder="Select Country"
-              inputStyles={{ color: isDarkMode ? "#464a2f" : "#6b7280" }}
+              inputStyles={{ color: theme.dark ? "#464a2f" : "#6b7280" }}
             />
             <TextInput
-              className="py-4 px-4 mb-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full text-gray-900 dark:text-gray-100"
+              className={`py-4 px-4 mb-5 ${
+                theme.dark
+                  ? "bg-gray-800 border-gray-600"
+                  : "bg-white border-gray-300"
+              } rounded-xl w-full text-gray-900 dark:text-gray-100`}
               placeholder="Task Description"
+              placeholderTextColor={theme.dark ? "#a1a1a1" : "#6b7280"}
               value={task.description}
               maxLength={120}
               onChangeText={(text) => inputChangeHandler("description", text)}

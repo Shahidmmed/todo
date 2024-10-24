@@ -45,14 +45,35 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
   const completeTask = async (index: number) => {
     try {
-      const userName = userInfo[index]?.user;
-
-      const updatedTasks = userInfo.filter(
-        (_, taskIndex) => taskIndex !== index
+      const taskName = userInfo[index]?.description;
+      Alert.alert(
+        "Delete Task",
+        `Are you sure you want to delete the task "${taskName}"?`,
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "OK",
+            onPress: async () => {
+              try {
+                const updatedTasks = userInfo.filter(
+                  (_, taskIndex) => taskIndex !== index
+                );
+                setUserInfo(updatedTasks);
+                await AsyncStorage.setItem(
+                  "tasks",
+                  JSON.stringify(updatedTasks)
+                );
+                Alert.alert(
+                  "Success",
+                  `Task "${taskName}" deleted successfully.`
+                );
+              } catch (error) {
+                console.error("Error updating AsyncStorage:", error);
+              }
+            },
+          },
+        ]
       );
-      setUserInfo(updatedTasks);
-      await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
-      Alert.alert("Success", `Task assigned to ${userName} deleted`);
     } catch (error) {
       console.error("Error updating AsyncStorage:", error);
     }
