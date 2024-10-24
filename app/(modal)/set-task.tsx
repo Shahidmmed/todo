@@ -76,9 +76,8 @@ const SetTask = () => {
     const updatedTasks = [...userInfo, task];
     setUserInfo(updatedTasks);
     await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    Alert.alert("Success", "Task added successfully");
 
-    console.log("set", userInfo);
-    console.log("set2", updatedTasks);
     loadTasks();
     router.back();
   };
@@ -131,6 +130,7 @@ const SetTask = () => {
               className="py-4 px-4 mb-5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full text-gray-900 dark:text-gray-100"
               placeholder="Task Description"
               value={task.description}
+              maxLength={120}
               onChangeText={(text) => inputChangeHandler("description", text)}
             />
           </KeyboardAvoidingView>

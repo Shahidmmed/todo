@@ -8,6 +8,7 @@ import {
 
 import { Users } from "@/components/models/Users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 interface UserContextType {
   userInfo: Users[];
@@ -44,13 +45,14 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
   const completeTask = async (index: number) => {
     try {
+      const userName = userInfo[index]?.user;
+
       const updatedTasks = userInfo.filter(
         (_, taskIndex) => taskIndex !== index
       );
       setUserInfo(updatedTasks);
       await AsyncStorage.setItem("tasks", JSON.stringify(updatedTasks));
-
-      console.log("Task deleted and AsyncStorage updated successfully.");
+      Alert.alert("Success", `Task assigned to ${userName} deleted`);
     } catch (error) {
       console.error("Error updating AsyncStorage:", error);
     }
